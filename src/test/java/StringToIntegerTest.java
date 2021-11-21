@@ -32,8 +32,19 @@ public class StringToIntegerTest {
             StringToInteger.convert("5 437@2");
             fail("An error expected");
         }
-        catch(IllegalArgumentException e){
+        catch(NumberFormatException e){
             Assert.assertEquals("Number should be numerical.", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNullFormat() {
+        try{
+            StringToInteger.convert("");
+            fail("An error expected");
+        }
+        catch(NumberFormatException e){
+            Assert.assertEquals("Your input must be not null!", e.getMessage());
         }
     }
 
