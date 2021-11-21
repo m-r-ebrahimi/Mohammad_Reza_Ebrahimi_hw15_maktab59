@@ -1,5 +1,4 @@
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import q1.StringToInteger;
 
@@ -17,33 +16,30 @@ public class StringToIntegerTest {
 
     @Test
     public void testWrongPeriod() {
-        try{
+        try {
             StringToInteger.convert("543782");
             fail("An error expected");
-        }
-        catch(IllegalArgumentException e){
+        } catch (NumberFormatException e) {
             Assert.assertEquals("Number should be between -32767 and 32767", e.getMessage());
         }
     }
 
     @Test
     public void testWrongFormat() {
-        try{
+        try {
             StringToInteger.convert("5 437@2");
             fail("An error expected");
-        }
-        catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             Assert.assertEquals("Number should be numerical.", e.getMessage());
         }
     }
 
     @Test
     public void testNullFormat() {
-        try{
-            StringToInteger.convert("");
+        try {
+            StringToInteger.convert(null);
             fail("An error expected");
-        }
-        catch(NumberFormatException e){
+        } catch (NumberFormatException e) {
             Assert.assertEquals("Your input must be not null!", e.getMessage());
         }
     }
