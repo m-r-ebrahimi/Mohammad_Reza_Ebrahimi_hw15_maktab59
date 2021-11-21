@@ -18,6 +18,7 @@ public class StringToIntegerTest {
     public void testWrongPeriod() {
         try {
             StringToInteger.convert("54378256");
+            StringToInteger.convert("-7654378256");
             fail("An error expected");
         } catch (NumberFormatException e) {
             Assert.assertEquals("Number should be between -32767 and 32767", e.getMessage());
