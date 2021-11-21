@@ -18,17 +18,15 @@ public class StringToInteger {
 
         char[] numbers = s.toCharArray();
 
-        int i = 0;
         for (int number : numbers) {
             if (number < '0' || number > '9')
                 throw new NumberFormatException("Number should be numerical.");
             numberOfString = (numberOfString * 10) + (number - '0');
-            i++;
         }
 
-        if (i > 5) {
+        if (numberOfString > 32767 || numberOfString < -32767) {
             throw new NumberFormatException("Number should be between -32767 and 32767");
         }
-            return isPositive ? numberOfString : -numberOfString;
+        return isPositive ? numberOfString : -numberOfString;
     }
 }

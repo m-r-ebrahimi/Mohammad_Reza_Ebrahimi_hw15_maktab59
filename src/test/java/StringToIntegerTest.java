@@ -17,7 +17,7 @@ public class StringToIntegerTest {
     @Test
     public void testWrongPeriod() {
         try {
-            StringToInteger.convert("543782");
+            StringToInteger.convert("54378256");
             fail("An error expected");
         } catch (NumberFormatException e) {
             Assert.assertEquals("Number should be between -32767 and 32767", e.getMessage());
@@ -27,7 +27,7 @@ public class StringToIntegerTest {
     @Test
     public void testWrongFormat() {
         try {
-            StringToInteger.convert("5 437@2");
+            StringToInteger.convert("5 437@2__ 56");
             fail("An error expected");
         } catch (NumberFormatException e) {
             Assert.assertEquals("Number should be numerical.", e.getMessage());
