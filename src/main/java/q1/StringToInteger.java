@@ -16,13 +16,16 @@ public class StringToInteger {
             isPositive = true;
         }
 
-        char[] numbers = s.toCharArray();
 
-        for (int number : numbers) {
-            if (number < '0' || number > '9')
-                throw new NumberFormatException("Number should be numerical.");
-            numberOfString = (numberOfString * 10) + (number - '0');
+        if (s.matches("^[0-9]+$")) {
+            char[] numbers = s.toCharArray();
+            for (int number : numbers) {
+                numberOfString = (numberOfString * 10) + (number - '0');
+            }
+        } else {
+            throw new NumberFormatException("Number should be numerical.");
         }
+
 
         if (numberOfString > 32767 || numberOfString < -32767) {
             throw new NumberFormatException("Number should be between -32767 and 32767");
