@@ -9,15 +9,14 @@ public class StringToInteger {
         if (s == null)
             throw new NumberFormatException("Your input must be not null!");
 
-        if (s.charAt(0) == '-') {
-            isPositive = false;
-            s = s.substring(1);
-        } else {
-            isPositive = true;
-        }
+        if (s.matches("^[-0-9]+$")) {
+            if (s.charAt(0) == '-') {
+                isPositive = false;
+                s = s.substring(1);
+            } else {
+                isPositive = true;
+            }
 
-
-        if (s.matches("^[0-9]+$")) {
             char[] numbers = s.toCharArray();
             for (int number : numbers) {
                 numberOfString = (numberOfString * 10) + (number - '0');
