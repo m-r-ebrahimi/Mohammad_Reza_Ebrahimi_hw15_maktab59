@@ -1,18 +1,15 @@
 package q2.entity;
 
 import q2.entity.base.BaseEntity;
-import q2.entity.base.BaseEntityInterface;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.time.LocalTime;
 import java.util.Objects;
 
 @Entity
-public class Transaction extends BaseEntity implements BaseEntityInterface<Integer> {
+public class Transaction extends BaseEntity  {
     @Column
     private LocalTime time;
     @Column

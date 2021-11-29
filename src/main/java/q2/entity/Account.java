@@ -1,13 +1,12 @@
 package q2.entity;
 
 import q2.entity.base.BaseEntity;
-import q2.entity.base.BaseEntityInterface;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Account extends BaseEntity implements BaseEntityInterface<Integer> {
+public class Account extends BaseEntity {
     @ManyToOne
     private Customer customer;
     @ManyToOne
