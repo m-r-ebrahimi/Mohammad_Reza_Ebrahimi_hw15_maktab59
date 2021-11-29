@@ -1,6 +1,7 @@
 package q2.entity;
 
 import q2.entity.base.BaseEntity;
+import q2.entity.base.BaseEntityInterface;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
