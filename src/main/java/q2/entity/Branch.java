@@ -8,25 +8,23 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.List;
-import java.util.Set;
+import java.util.Objects;
 
 @Entity
 public class Branch extends BaseEntity implements BaseEntityInterface<Integer> {
     @Column
-    private String name;
-
+    private Integer code;
     @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
     private List<Account> accounts;
-
     @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
     private List<Employee> employees;
 
-    public String getName() {
-        return name;
+    public Integer getCode() {
+        return code;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCode(Integer code) {
+        this.code = code;
     }
 
     public List<Account> getAccounts() {
@@ -43,5 +41,27 @@ public class Branch extends BaseEntity implements BaseEntityInterface<Integer> {
 
     public void setEmployees(List<Employee> employees) {
         this.employees = employees;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Branch branch = (Branch) o;
+        return code.equals(branch.code) && Objects.equals(accounts, branch.accounts) && Objects.equals(employees, branch.employees);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(code, accounts, employees);
+    }
+
+    @Override
+    public String toString() {
+        return "Branch{" +
+                "code=" + code +
+                ", accounts=" + accounts +
+                ", employees=" + employees +
+                '}';
     }
 }
