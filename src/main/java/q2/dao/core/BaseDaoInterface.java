@@ -1,7 +1,6 @@
 package q2.dao.core;
 
 import q2.entity.base.BaseEntity;
-import q2.entity.base.BaseEntityInterface;
 
 import java.util.List;
 

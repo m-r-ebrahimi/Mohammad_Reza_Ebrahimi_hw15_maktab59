@@ -4,6 +4,7 @@ import q2.entity.*;
 import q2.service.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -40,7 +41,7 @@ public class Menu {
 
     private static void customerMenu() {
         int selected = 1;
-        while (selected != 10) {
+        while (selected != 9) {
             System.out.println("""
                     1) add new customer
                     2) update customer
@@ -50,8 +51,7 @@ public class Menu {
                     6) update an account
                     7) load an account
                     8) delete an account
-                    9) start transaction
-                    10) back
+                    9) back
                     """);
             selected = scanner.nextInt();
             scanner.nextLine();
@@ -66,23 +66,79 @@ public class Menu {
             } else if (selected == 5) {
                 addAccount();
             } else if (selected == 6) {
-                updateAccount();
+                //updateAccount();
             } else if (selected == 7) {
-                //loadAccount();
+                loadAccount();
             } else if (selected == 8) {
-                //deleteAccount();
-            } else if (selected == 9) {
-                //  addTransaction();
-            } else if (selected < 1 || selected > 10) {
+                deleteAccount();
+            } else if (selected < 1 || selected > 9) {
                 System.out.println("Try again");
             }
         }
         System.out.println("**********************************");
     }
 
-    private static void updateAccount() {
-
+    private static void deleteAccount() {
+        System.out.println("Enter id");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        new AccountService().delete(id);
+        List<Card> cards = new CardService().loadAll();
+        for (Card card : cards) {
+            if (card.getAccount().getId() == id) {
+                new CardService().delete(card.getId());
+                break;
+            }
+        }
     }
+
+    private static void loadAccount() {
+        int selected = 0;
+        while (selected != 4) {
+            System.out.println("""
+                    1) load account by id
+                    2) load all accounts
+                    3) load card by account
+                    4) back""");
+            selected = scanner.nextInt();
+            scanner.nextLine();
+            if (selected == 1) {
+                loadAccountByid();
+            } else if (selected == 2) {
+                loadAccountAll();
+            } else if (selected == 3) {
+                loadCard();
+            } else if (selected < 1 || selected > 4) {
+                System.out.println("try again");
+            }
+            System.out.println("**********************************");
+        }
+    }
+
+    private static void loadCard() {
+        System.out.println("enter account id");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        List<Card> cards = new CardService().loadAll();
+        for (Card card : cards) {
+            if (card.getAccount().getId() == id) {
+                System.out.println(card);
+                break;
+            }
+        }
+    }
+
+    private static void loadAccountAll() {
+        System.out.println(new AccountService().loadAll());
+    }
+
+    private static void loadAccountByid() {
+        System.out.println("Enter id");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println(new AccountService().loadById(id));
+    }
+
 
     private static void addAccount() {
         Account account = new Account();
