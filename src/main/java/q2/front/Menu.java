@@ -1,12 +1,10 @@
 package q2.front;
 
-import q2.entity.Account;
-import q2.entity.Branch;
-import q2.entity.Employee;
-import q2.service.BranchService;
-import q2.service.EmployeeService;
+import q2.entity.*;
+import q2.service.*;
 
-import java.util.ArrayList;
+import java.util.Date;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Menu {
@@ -70,16 +68,126 @@ public class Menu {
             } else if (selected == 6) {
                 updateAccount();
             } else if (selected == 7) {
-                loadAccount();
+                //loadAccount();
             } else if (selected == 8) {
-                deleteAccount();
+                //deleteAccount();
             } else if (selected == 9) {
-                addTransaction();
+                //  addTransaction();
             } else if (selected < 1 || selected > 10) {
                 System.out.println("Try again");
             }
         }
         System.out.println("**********************************");
+    }
+
+    private static void updateAccount() {
+
+    }
+
+    private static void addAccount() {
+        Account account = new Account();
+        System.out.println("enter balance");
+        int balance = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("enter branch id");
+        int branchId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("enter customer id");
+        int customerId = scanner.nextInt();
+        scanner.nextLine();
+        account.setBalance(balance);
+        account.setBranch(new BranchService().loadById(branchId));
+        account.setCustomer(new CustomerService().loadById(customerId));
+        new AccountService().saveOrUpdate(account);
+
+        //**********************************************
+        Card card = new Card();
+        StringBuilder cardNumber = new StringBuilder();
+        for (int i = 0; i < 16; i++) {
+            cardNumber.append((int) (Math.random() * 10));
+        }
+
+        StringBuilder cardcvv2 = new StringBuilder();
+        for (int i = 0; i < 4; i++) {
+            cardcvv2.append((int) (Math.random() * 10));
+        }
+        String expiration = new Date().getYear() + 1904 + "/" + new Date().getMonth() + "/" + new Date().getDate();
+        System.out.println("enter first password for card");
+        String firstPassword = scanner.nextLine();
+        System.out.println("enter second password for card");
+        String secondPassword = scanner.nextLine();
+
+        card.setCardNumber(cardNumber.toString());
+        card.setCvv2(Integer.parseInt(cardcvv2.toString()));
+        card.setExpiration(expiration);
+        card.setFirstPassword(firstPassword);
+        card.setSecondPassword(secondPassword);
+        card.setAccount(new AccountService().loadById(account.getId()));
+        new CardService().saveOrUpdate(card);
+    }
+
+    private static void deleteCustomer() {
+        System.out.println("Enter id");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        new CustomerService().delete(id);
+    }
+
+    private static void loadCustomer() {
+        int selected = 0;
+        while (selected != 3) {
+            System.out.println("""
+                    1) load by id
+                    2) load all
+                    3) back""");
+            selected = scanner.nextInt();
+            scanner.nextLine();
+            if (selected == 1) {
+                loadCustomerByid();
+            } else if (selected == 2) {
+                loadCustomerAll();
+            } else if (selected < 1 || selected > 3) {
+                System.out.println("try again");
+            }
+            System.out.println("**********************************");
+        }
+    }
+
+    private static void loadCustomerAll() {
+        System.out.println(new CustomerService().loadAll());
+    }
+
+    private static void loadCustomerByid() {
+        System.out.println("Enter id");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println(new CustomerService().loadById(id));
+    }
+
+    private static void updateCustomer() {
+        Customer customer = new Customer();
+        System.out.println("enter id");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("enter new name");
+        String name = scanner.nextLine();
+        System.out.println("enter new national id");
+        String nationalId = scanner.nextLine();
+        customer.setId(id);
+        customer.setName(name);
+        customer.setNationalId(nationalId);
+        new CustomerService().saveOrUpdate(customer);
+    }
+
+    private static void addCustomer() {
+        Customer customer = new Customer();
+        System.out.println("enter name");
+        String name = scanner.nextLine();
+        System.out.println("enter national id");
+        String nationalId = scanner.nextLine();
+        customer.setName(name);
+        customer.setNationalId(nationalId);
+        new CustomerService().saveOrUpdate(customer);
     }
 
     private static void employeeMenu() {
@@ -259,8 +367,6 @@ public class Menu {
         Integer code = scanner.nextInt();
         scanner.nextLine();
         branch.setCode(code);
-        branch.setAccounts(new ArrayList<Account>());
-        branch.setEmployees(new ArrayList<Employee>());
         new BranchService().saveOrUpdate(branch);
     }
 }
