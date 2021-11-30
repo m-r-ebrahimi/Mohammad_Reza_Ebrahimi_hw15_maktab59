@@ -3,9 +3,9 @@ package q2.front;
 import q2.entity.*;
 import q2.service.*;
 
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 
 public class Menu {
@@ -66,7 +66,7 @@ public class Menu {
             } else if (selected == 5) {
                 addAccount();
             } else if (selected == 6) {
-                //updateAccount();
+                updateAccount();
             } else if (selected == 7) {
                 loadAccount();
             } else if (selected == 8) {
@@ -78,11 +78,194 @@ public class Menu {
         System.out.println("**********************************");
     }
 
+    private static void updateAccount() {
+        int selected = 0;
+        while (selected != 4) {
+            System.out.println("""
+                    1) update account
+                    2) update card
+                    3) start transaction
+                    4) back
+                    """);
+            selected = scanner.nextInt();
+            scanner.nextLine();
+            if (selected == 1) {
+                updateAccountById();
+            } else if (selected == 2) {
+                updateCardOfAccount();
+            } else if (selected == 3) {
+                startTransaction();
+            } else if (selected < 1 || selected > 4) {
+                System.out.println("try again");
+            }
+            System.out.println("**************************************");
+        }
+    }
+
+    private static void startTransaction() {
+        int selected = 0;
+        while (selected != 4) {
+            System.out.println("""
+                    1) add balance to account
+                    2) withdraw from bank account
+                    3) Money transfer
+                    4) back
+                    """);
+            selected = scanner.nextInt();
+            scanner.nextLine();
+            if (selected == 1) {
+                addBalanceToAccount();
+            } else if (selected == 2) {
+                withdrawFromBankAccount();
+            } else if (selected == 3) {
+                moneyTransfer();
+            } else if (selected < 1 || selected > 4) {
+                System.out.println("try again");
+            }
+        }
+        System.out.println("*******************************");
+    }
+
+    private static void moneyTransfer() {
+        Transaction transaction = new Transaction();
+        Account accountOrigin = new Account();
+        Account accountDest = new Account();
+
+        System.out.println("enter origin card number");
+        String originCardNumber = scanner.nextLine();
+        System.out.println("enter card second password");
+        String password = scanner.nextLine();
+        System.out.println("enter destination card number");
+        String destinationCardNumber = scanner.nextLine();
+        System.out.println("enter money");
+        int money = scanner.nextInt();
+        scanner.nextLine();
+        List<Card> cards = new CardService().loadAll();
+        for (Card card : cards) {
+            if (card.getCardNumber().equals(destinationCardNumber)) {
+                accountDest = card.getAccount();
+            }
+        }
+        for (Card card : cards) {
+            if (card.getCardNumber().equals(originCardNumber)) {
+                if (card.getSecondPassword().equals(password)) {
+                    accountOrigin = card.getAccount();
+                }
+            }
+        }
+        transaction.setTime(LocalTime.now());
+        transaction.setAmount(money);
+        transaction.setOriginAccount(accountOrigin);
+        transaction.setDestinationAccount(accountDest);
+        new TransactionService().saveOrUpdate(transaction);
+
+        Integer balance = accountOrigin.getBalance();
+        balance-=money;
+        accountOrigin.setBalance(balance);
+        new AccountService().saveOrUpdate(accountOrigin);
+
+        balance = accountDest.getBalance();
+        balance+=money;
+        accountDest.setBalance(balance);
+        new AccountService().saveOrUpdate(accountDest);
+    }
+
+    private static void withdrawFromBankAccount() {
+        System.out.println("enter card number");
+        String cardNumber = scanner.nextLine();
+        System.out.println("enter card first password");
+        String password = scanner.nextLine();
+        System.out.println("enter money");
+        int money = scanner.nextInt();
+        scanner.nextLine();
+        List<Card> cards = new CardService().loadAll();
+        for (Card card : cards) {
+            if (card.getCardNumber().equals(cardNumber)) {
+                if (card.getFirstPassword().equals(password)) {
+                    Account account = card.getAccount();
+                    Integer balance = account.getBalance();
+                    balance -= money;
+                    account.setBalance(balance);
+                    new AccountService().saveOrUpdate(account);
+                } else {
+                    System.out.println("you entered wrong password");
+                }
+            }
+        }
+    }
+
+    private static void addBalanceToAccount() {
+        System.out.println("enter card number");
+        String cardNumber = scanner.nextLine();
+        System.out.println("enter money");
+        int money = scanner.nextInt();
+        scanner.nextLine();
+        List<Card> cards = new CardService().loadAll();
+        for (Card card : cards) {
+            if (card.getCardNumber().equals(cardNumber)) {
+                Account account = card.getAccount();
+                Integer balance = account.getBalance();
+                balance += money;
+                account.setBalance(balance);
+                new AccountService().saveOrUpdate(account);
+            }
+        }
+    }
+
+    private static void updateCardOfAccount() {
+        Card card = new Card();
+        System.out.println("enter id");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        StringBuilder cardNumber = new StringBuilder();
+        for (int i = 0; i < 16; i++) {
+            cardNumber.append((int) (Math.random() * 10));
+        }
+        StringBuilder cardcvv2 = new StringBuilder();
+        for (int i = 0; i < 4; i++) {
+            cardcvv2.append((int) (Math.random() * 10));
+        }
+        String expiration = new Date().getYear() + 1904 + "/" + new Date().getMonth() + "/" + new Date().getDate();
+        System.out.println("enter new first password for card");
+        String firstPassword = scanner.nextLine();
+        System.out.println("enter new second password for card");
+        String secondPassword = scanner.nextLine();
+        System.out.println("enter new account id");
+        int accountId = scanner.nextInt();
+        scanner.nextLine();
+        card.setId(id);
+        card.setCardNumber(cardNumber.toString());
+        card.setCvv2(Integer.parseInt(cardcvv2.toString()));
+        card.setExpiration(expiration);
+        card.setFirstPassword(firstPassword);
+        card.setSecondPassword(secondPassword);
+        card.setAccount(new AccountService().loadById(accountId));
+        new CardService().saveOrUpdate(card);
+    }
+
+    private static void updateAccountById() {
+        Account account = new Account();
+        System.out.println("enter id");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("enter new branch id");
+        int branchId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("enter new customer id");
+        int customerId = scanner.nextInt();
+        scanner.nextLine();
+        account.setId(id);
+        account.setBalance(new AccountService().loadById(id).getBalance());
+        account.setBranch(new BranchService().loadById(branchId));
+        account.setCustomer(new CustomerService().loadById(customerId));
+        new AccountService().saveOrUpdate(account);
+    }
+
     private static void deleteAccount() {
         System.out.println("Enter id");
         int id = scanner.nextInt();
         scanner.nextLine();
-        new AccountService().delete(id);
+
         List<Card> cards = new CardService().loadAll();
         for (Card card : cards) {
             if (card.getAccount().getId() == id) {
@@ -90,6 +273,7 @@ public class Menu {
                 break;
             }
         }
+        new AccountService().delete(id);
     }
 
     private static void loadAccount() {
@@ -138,7 +322,6 @@ public class Menu {
         scanner.nextLine();
         System.out.println(new AccountService().loadById(id));
     }
-
 
     private static void addAccount() {
         Account account = new Account();
