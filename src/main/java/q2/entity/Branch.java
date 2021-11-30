@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class Branch extends BaseEntity  {
+public class Branch extends BaseEntity {
     @Column
     private Integer code;
     @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL)
@@ -59,8 +59,6 @@ public class Branch extends BaseEntity  {
     public String toString() {
         return "Branch{" +
                 "code=" + code +
-                ", accounts=" + accounts +
-                ", employees=" + employees +
                 '}';
     }
 }

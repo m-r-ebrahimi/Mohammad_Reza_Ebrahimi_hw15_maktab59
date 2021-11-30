@@ -82,4 +82,15 @@ public class Card extends BaseEntity {
     public int hashCode() {
         return Objects.hash(cardNumber, cvv2, expiration, firstPassword, secondPassword, account);
     }
+
+    @Override
+    public String toString() {
+        return "Card{" +
+                "cardNumber='" + cardNumber + '\'' +
+                ", cvv2=" + cvv2 +
+                ", expiration='" + expiration + '\'' +
+                ", firstPassword='" + firstPassword + '\'' +
+                ", secondPassword='" + secondPassword + '\'' +
+                '}';
+    }
 }

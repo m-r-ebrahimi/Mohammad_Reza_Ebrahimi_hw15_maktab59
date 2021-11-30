@@ -29,8 +29,10 @@ public abstract class BaseDao<T extends BaseEntity,ID extends Number> implements
 
     @Override
     public void delete(ID id) {
+        entityManager.getTransaction().begin();
         T entity = loadById(id);
         entityManager.remove(entity);
+        entityManager.getTransaction().commit();
     }
 
     @Override

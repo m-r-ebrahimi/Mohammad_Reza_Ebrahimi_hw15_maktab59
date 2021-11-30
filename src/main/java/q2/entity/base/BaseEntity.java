@@ -19,6 +19,7 @@ public class BaseEntity implements BaseEntityInterface<Integer> {
 
     @Override
     public void setId(Integer integer) {
+        this.id = integer;
     }
 
     @Override

@@ -29,7 +29,7 @@ public class CrudService<T extends BaseEntity, ID extends Number> {
     }
 
     public void saveOrUpdate(T entity) {
-        if (checkEntity(entity)) {
+        if (entity.getId() == null) {
             baseDao.save(entity);
         } else {
             baseDao.update((ID) entity.getId(), entity);
@@ -56,10 +56,12 @@ public class CrudService<T extends BaseEntity, ID extends Number> {
         return baseDao.loadAll();
     }
 
-    private boolean checkEntity(T entity) {
+
+
+    /*private boolean checkEntity(T entity) {
         if (entity == null) {throw new ModificationDataException("This entity is not live.");}
         if (entity.getId() == null) {throw new ModificationDataException("This entity is not live.");}
         T foundEntity = baseDao.loadById((ID) entity.getId());
         return foundEntity == null;
-    }
+    }*/
 }

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class Customer extends BaseEntity  {
+public class Customer extends BaseEntity {
     @Column
     private String name;
     @Column
@@ -60,7 +60,6 @@ public class Customer extends BaseEntity  {
         return "Customer{" +
                 "name='" + name + '\'' +
                 ", nationalId='" + nationalId + '\'' +
-                ", accounts=" + accounts +
                 '}';
     }
 }
